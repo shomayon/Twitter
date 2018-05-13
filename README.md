@@ -7,6 +7,7 @@ For now, you need just TwitterSearch to run the above codes. Please use Python 3
 TwitterSearch is library allows you easily create a search through the Twitter API.
 
 Installation
+
 TwitterSearch is also available on pypi and therefore can be installed via pip install TwitterSearch or easy_install TwitterSearch.
 
 It supports OAuth 1.0 and OAuth 2.0 authentication. And, it works with the latest Python versions in both 2.x and 3.x branches.
