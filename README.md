@@ -2,15 +2,14 @@
 This is a project for detecting people with mental health disordes through Twitter (for UCSC).
 
 Prerequisites
-For now, you need just twitter API to run the above codes. Please use Python 3.5+.
 
-TwitterAPI is a Python package for accessing Twitter's REST APIs and Streaming APIs.
-It supports OAuth 1.0 and OAuth 2.0 authentication. And, it works with the latest Python versions in both 2.x and 3.x branches.
+For now, you need just TwitterSearch to run the above codes. Please use Python 3.5+.
+TwitterSearch is library allows you easily create a search through the Twitter API.
 
 Installation
-From the command line:
+TwitterSearch is also available on pypi and therefore can be installed via pip install TwitterSearch or easy_install TwitterSearch.
 
-pip install TwitterAPI
+It supports OAuth 1.0 and OAuth 2.0 authentication. And, it works with the latest Python versions in both 2.x and 3.x branches.
 
 
 How to run the above codes? (Will provide a detailed guide later )
