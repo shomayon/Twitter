@@ -15,10 +15,10 @@ api = twitter.Api(consumer_key='GwpuXi1ZMyc0ATSb3FEPaTyOU',
 
 m=[]
 l= []
-search = api.GetSearch(['I diagnosed with Anxiety' ]) # Replace any words with your search
+search = api.GetSearch(['I diagnosed with Anxiety' ] )# Replace any words with your search
 for tweet in search:
     l.append(tweet.user.screen_name)
-    m.append(tweet.text)
+    m.append(tweet.fulltext)
 
 
 search = api.GetSearch(['I have been diagnosed with depression' ]) # Replace any words with your search
