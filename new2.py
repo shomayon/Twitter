@@ -15,21 +15,21 @@ api = twitter.Api(consumer_key='GwpuXi1ZMyc0ATSb3FEPaTyOU',
 
 m=[]
 l= []
-search = api.GetSearch(term='depression', lang='en', result_type='recent', count=100, max_id='')
+search = api.GetSearch("depression") # Replace any words with your search
 for tweet in search:
     l.append(tweet.user.id)
     m.append(tweet.text)
-    print(tweet.user.screen_name, tweet.text)
+    print(tweet.user.id, tweet.text)
 
 # Getting Public tweets from Trump
 #t = api.GetUserTimeline(screen_name="ellease_lydia", count=10)
 
 # Tweets is a list . printing ID and text, t dic
-#zip(l,m)
-#with open('Dep3.csv', 'w') as f:
-#writer = csv.writer(f, delimiter='\t')
-#writer.writerows(zip(l,m))
-#quit()
+zip(l,m)
+with open('Dep3.csv', 'w') as f:
+writer = csv.writer(f, delimiter='\t')
+writer.writerows(zip(l,m))
+quit()
 
 #f = open('Dep2.txt','w')
 #for item in s:
