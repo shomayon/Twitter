@@ -15,34 +15,61 @@ api = twitter.Api(consumer_key='GwpuXi1ZMyc0ATSb3FEPaTyOU',
 
 m=[]
 l= []
-search = api.GetSearch("depression") # Replace any words with your search
+search = api.GetSearch(['I have been diagnosed with Anxiety' ]) # Replace any words with your search
 for tweet in search:
-    l.append(tweet.user.id)
+    l.append(tweet.user.screen_name)
     m.append(tweet.text)
-    print(tweet.user.id, tweet.text)
-
-# Getting Public tweets from Trump
-#t = api.GetUserTimeline(screen_name="ellease_lydia", count=10)
-
-# Tweets is a list . printing ID and text, t dic
-zip(l,m)
-with open('Dep3.csv', 'w') as f:
-writer = csv.writer(f, delimiter='\t')
-writer.writerows(zip(l,m))
-quit()
-
-#f = open('Dep2.txt','w')
-#for item in s:
-#  f.write("%s\n" % item)
-#tweets = [i.AsDict() for i in t]
-#for t in tweets:
-#    print(t['id'], t['text'])
-#    print(t['text'])
-#    f.write(t['text'])
-#    f.write('\n')
-#f.close()
 
 
+search = api.GetSearch(['I have been diagnosed with depression' ]) # Replace any words with your search
+for tweet in search:
+    l.append(tweet.user.screen_name)
+    m.append(tweet.text)
+
+search = api.GetSearch(['I have been diagnosed with dep' ]) # Replace any words with your search
+for tweet in search:
+    l.append(tweet.user.screen_name)
+    m.append(tweet.text)
+
+search = api.GetSearch(['I have been diagnosed with Bipolar' ]) # Replace any words with your search
+for tweet in search:
+    l.append(tweet.user.screen_name)
+    m.append(tweet.text)
+
+search = api.GetSearch(['I have been diagnosed with schizophrenia' ]) # Replace any words with your search
+for tweet in search:
+    l.append(tweet.user.screen_name)
+    m.append(tweet.text)
+
+search = api.GetSearch(['I have been diagnosed with post-traumatic stress disorder' ]) # Replace any words with your search
+for tweet in search:
+    l.append(tweet.user.screen_name)
+    m.append(tweet.text)
+
+
+search = api.GetSearch(['I have been diagnosed with PTSD' ]) # Replace any words with your search
+for tweet in search:
+    l.append(tweet.user.screen_name)
+    m.append(tweet.text)
+
+search = api.GetSearch(['I have been diagnosed with ADHD' ]) # Replace any words with your search
+for tweet in search:
+    l.append(tweet.user.screen_name)
+    m.append(tweet.text)
+
+search = api.GetSearch(['I have been diagnosed with Attention Deficit Hyperactivity Disorder' ]) # Replace any words with your search
+for tweet in search:
+    l.append(tweet.user.screen_name)
+    m.append(tweet.text)
+
+
+
+with open('Data1.csv', 'w', newline='') as csvfile:
+    fieldnames = ['Username', 'Text']
+    writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
+    writer.writeheader()
+    for i, j in zip(l, m):
+        writer.writerow({'Username': i, 'Text': j})
 
 
 
