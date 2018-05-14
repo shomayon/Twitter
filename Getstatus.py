@@ -1,11 +1,8 @@
 
 import twitter
 import csv
-import re
-import nltk
-
-
 import oauthlib
+
 api = twitter.Api(consumer_key='GwpuXi1ZMyc0ATSb3FEPaTyOU',
   consumer_secret='0Y1jaPrDOa0uGsxQc4DSDphRWPPYCtVZ0TtvgZorAvzywIZtXJ',
   access_token_key='220846580-AtrY0FBq5Yd2OcHtjm4FL5KEdf31qzjOtFMDoE4m',
@@ -13,6 +10,10 @@ api = twitter.Api(consumer_key='GwpuXi1ZMyc0ATSb3FEPaTyOU',
 
 
 p = ['StoneybrookVA']
+
+with open('../untitled5/username.csv' "rb") as f:
+    reader = csv.reader(f, delimiter="\t")
+    for i, line in enumerate(reader):
 
 for items in p:
 
