@@ -15,7 +15,7 @@ api = twitter.Api(consumer_key='GwpuXi1ZMyc0ATSb3FEPaTyOU',
 
 m=[]
 l= []
-search = api.GetSearch(['I have been diagnosed with Anxiety' ]) # Replace any words with your search
+search = api.GetSearch(['I diagnosed with Anxiety' ]) # Replace any words with your search
 for tweet in search:
     l.append(tweet.user.screen_name)
     m.append(tweet.text)
@@ -58,6 +58,40 @@ for tweet in search:
     m.append(tweet.text)
 
 search = api.GetSearch(['I have been diagnosed with Attention Deficit Hyperactivity Disorder' ]) # Replace any words with your search
+for tweet in search:
+    l.append(tweet.user.screen_name)
+    m.append(tweet.text)
+
+search = api.GetSearch(['I have been diagnosed with Attention Deficit Hyperactivity Disorder' ]) # Replace any words with your search
+for tweet in search:
+    l.append(tweet.user.screen_name)
+    m.append(tweet.text)
+
+
+search = api.GetSearch(['I feel sad']) # Replace any words with your search
+for tweet in search:
+    l.append(tweet.user.screen_name)
+    m.append(tweet.text)
+
+
+search = api.GetSearch(['I feel depressed' ]) # Replace any words with your search
+for tweet in search:
+    l.append(tweet.user.screen_name)
+    m.append(tweet.text)
+
+
+search = api.GetSearch(['my life is a failure' ]) # Replace any words with your search
+for tweet in search:
+    l.append(tweet.user.screen_name)
+    m.append(tweet.text)
+
+
+search = api.GetSearch(['I feel lonely' ]) # Replace any words with your search
+for tweet in search:
+    l.append(tweet.user.screen_name)
+    m.append(tweet.text)
+
+search = api.GetSearch(['my suicide attempt']) # Replace any words with your search
 for tweet in search:
     l.append(tweet.user.screen_name)
     m.append(tweet.text)
