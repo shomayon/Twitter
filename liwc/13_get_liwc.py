@@ -54,6 +54,6 @@ def main(infname,outfname):
 
 
 
-infname='../twitter_data copy.txt'
-ofname='../Get_LIWCalaki.csv'
+infname='../test.csv'
+ofname='../Get_LIWC_1000.csv'
 main(infname,ofname)

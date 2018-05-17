@@ -8,11 +8,11 @@ import nltk
 import oauthlib
 api = twitter.Api(consumer_key='GwpuXi1ZMyc0ATSb3FEPaTyOU',
                   consumer_secret='0Y1jaPrDOa0uGsxQc4DSDphRWPPYCtVZ0TtvgZorAvzywIZtXJ',
-                  access_token_key='220846580-AtrY0FBq5Yd2OcHtjm4FL5KEdf31qzjOtFMDoE4m',
-                  access_token_secret='ID9RUnPxFmrMcOQNMNUwSy713CFLULNb21hKeZ57bLq4R')
+                  access_token_key='220846580-ZUElx1lLAd5XRxrL9hYVG6CBkbjLUl3ftvCGIMqE',
+                  access_token_secret='WEFkSeH59z92ptB76tGKnh8l6mMKmWN1fVKqV6dYCuc77')
 
 
-t = api.GetUserTimeline(screen_name="rosieatlarge", count=1000)
+t = api.GetUserTimeline(screen_name="zangerdanger", count=10, tweet_type = extended)
 
 f = open('rosieatlarge.txt','w')
 tweets = [i.AsDict() for i in t]
@@ -22,22 +22,22 @@ for t in tweets:
     f.write(t['text'])
     f.write('\n')
 f.close()
-c= []
-term = "@"
-with open('rosieatlarge.txt') as f:
-    for line in f:
-        str = line
-        h = line.strip()
-        z =h.split()
-        p = filter(lambda x: x[0] != '@', z)
-        q = " ".join(filter(lambda x: x[0] != '@', p))
-        c.append(q)
-print(c)
+#c= []
+#term = "@"
+#with open('rosieatlarge.txt') as f:
+#    for line in f:
+#        str = line
+#        h = line.strip()
+#        z =h.split()
+#        p = filter(lambda x: x[0] != '@', z)
+#        q = " ".join(filter(lambda x: x[0] != '@', p))
+#        c.append(q)
+#print(c)
 
-resultFyle = open("output1.csv",'w')
-for r in c:
-    resultFyle.write(r + "\n")
-resultFyle.close()
+#resultFyle = open("output1.csv",'w')
+#for r in c:
+#    resultFyle.write(r + "\n")
+#resultFyle.close()
 
 
 
