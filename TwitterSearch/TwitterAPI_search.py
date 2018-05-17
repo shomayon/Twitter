@@ -19,6 +19,7 @@ search = api.GetSearch(['I have been diagnosed with Anxiety']) # Replace any wor
 for tweet in search:
     l.append(tweet.user.screen_name)
     m.append(tweet.text)
+    print(tweet.text)
 
 
 search = api.GetSearch(['I have been diagnosed with depression'], lang='en') # Replace any words with your search
@@ -106,8 +107,11 @@ with open('Data1.csv', 'w', newline='') as csvfile:
         writer.writerow({'Username': i, 'Text': j})
 
 
-
-
+#data1sample for now
+#with open("data1sample.csv",'w') as f:
+#    writer = csv.writer(f, dialect='excel')
+#    for val in m:
+#        writer.writerow([val])
 
 
 
