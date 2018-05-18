@@ -15,26 +15,36 @@ import pandas as pd
 
 #import matplotlib.pyplot as plt
 
-data = pd.read_csv('Get_LIWC.csv')
+data = pd.read_csv('Get_LIWC_240.csv')
 
-# Load the diabetes dataset
-#diabetes = datasets.load_diabetes()
-x = data[:1]
-y = data['col43']
+x =data[['Positive Emotion','Negative Emotion']].values
+#print(x)
+#print(x.shape)
 
-#convert to array to fit the model
+target = pd.read_csv('shidehtest.csv')
+y =target['lable'].values
+#print(y)
+#print(y.shape)
+
+#
+ #convert to array to fit the model
 x=np.asarray(x)
 y=np.asarray(y)
 
+# print(x)
+# print(y)
+
+# Split the data into training/testing sets
+diabetes_X_train = x[:100] # 100 aval
+diabetes_X_test = x[-100:]  #100 akhar
+
+# Split the targets into training/testing sets
+diabetes_y_train = y[:100]
+diabetes_y_test = y[-100:]
+
 regr = linear_model.LinearRegression()
-regr.fit(x, y)
+regr.fit(diabetes_X_train, diabetes_y_train)
 
-y_predicted = regr.predict(x)
 
-plt.scatter(x, y,  color='black')
-plt.plot(x, y_predicted, color='blue', linewidth=3)
-
-plt.xticks(())
-plt.yticks(())
-
-plt.show()
+diabetes_y_pred = regr.predict(diabetes_X_test)
+print(diabetes_y_pred)

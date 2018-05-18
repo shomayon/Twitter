@@ -7,8 +7,14 @@ import pandas as pd
 
 
 
-data = pd.read_csv('Get_LIWC.csv')
+data = pd.read_csv('Get_LIWC_1000.csv')
+target = pd.read_csv('shidehtest.csv')
 # x,y bezaram too matrix 2- peyda konam chejori ye col ke mikham begiram 3- x 250 *2 - x addae 1 ro be matrix ezafe mikone
+
+x =data[['Positive Emotion','Negative Emotion']].values
+target = pd.read_csv('shidehtest.csv')
+y =target['lable'].values
+
 def predict(self, X):
         x = self._add_ones_to(X)
 #
