@@ -15,19 +15,19 @@ import pandas as pd
 
 #import matplotlib.pyplot as plt
 
-data = pd.read_csv('Get_LIWC_240.csv')
+data = pd.read_csv('Get_LIWC.csv')
 
-x =data[['Positive Emotion','Negative Emotion']].values
+x =data[['Positive Emotion','Negative Emotion','Anxiety','Anger','Death','Feel','Health']].values
 #print(x)
-#print(x.shape)
-
-target = pd.read_csv('shidehtest.csv')
+print(x.shape)
+#
+target = pd.read_csv('dataset_lable.csv')
 y =target['lable'].values
 #print(y)
-#print(y.shape)
-
+print(y.shape)
 #
- #convert to array to fit the model
+#
+#convert to array to fit the model
 x=np.asarray(x)
 y=np.asarray(y)
 
@@ -35,11 +35,11 @@ y=np.asarray(y)
 # print(y)
 
 # Split the data into training/testing sets
-diabetes_X_train = x[:200] # 100 aval
+diabetes_X_train = x[:800] # 100 aval
 diabetes_X_test = x[-100:]  #100 akhar
 
 # Split the targets into training/testing sets
-diabetes_y_train = y[:200]
+diabetes_y_train = y[:800]
 diabetes_y_test = y[-100:]
 
 regr = linear_model.LinearRegression()

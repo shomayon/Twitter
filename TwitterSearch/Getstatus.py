@@ -15,6 +15,8 @@ auth.set_access_token(access_token, access_token_secret)
 # Creation of the actual interface, using authentication
 api = tweepy.API(auth)
 
+with open("test.csv",'w') as f:
+    writer = csv.writer(f, dialect='excel')
 alltweet =[]
 with open('../untitled5/TwitterSearch/test10user.csv') as f:
     for line in f:
