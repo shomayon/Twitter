@@ -1,10 +1,6 @@
 print(__doc__)
 
 
-# Code source: Jaques Grobler
-# License: BSD 3 clause
-
-
 import matplotlib.pyplot as plt
 import numpy as np
 from sklearn import  linear_model
@@ -17,7 +13,9 @@ import pandas as pd
 
 data = pd.read_csv('Get_LIWC.csv')
 
-x =data[['Positive Emotion','Negative Emotion','Anxiety','Anger','Death','Feel','Health']].values
+x =data[['Positive Emotion','Negative Emotion','Anxiety','Anger','Death','Feel','Health','Articles',
+         'Auxiliary Verbs','Conjunctions','Adverbs','Personal Pronouns',
+        'function','Assent','Certainty']].values
 #print(x)
 print(x.shape)
 #
@@ -35,13 +33,15 @@ y=np.asarray(y)
 # print(y)
 
 # Split the data into training/testing sets
-diabetes_X_train = x[:800] # 100 aval
+diabetes_X_train = x[:900] # 100 aval
 diabetes_X_test = x[-100:]  #100 akhar
 
 # Split the targets into training/testing sets
-diabetes_y_train = y[:800]
+diabetes_y_train = y[:900]
 diabetes_y_test = y[-100:]
 
+#print(diabetes_X_train.shape)
+#print(diabetes_y_train.shape)
 regr = linear_model.LinearRegression()
 regr.fit(diabetes_X_train, diabetes_y_train)
 
