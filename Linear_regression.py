@@ -35,11 +35,11 @@ y=np.asarray(y)
 # print(y)
 
 # Split the data into training/testing sets
-diabetes_X_train = x[:100] # 100 aval
+diabetes_X_train = x[:200] # 100 aval
 diabetes_X_test = x[-100:]  #100 akhar
 
 # Split the targets into training/testing sets
-diabetes_y_train = y[:100]
+diabetes_y_train = y[:200]
 diabetes_y_test = y[-100:]
 
 regr = linear_model.LinearRegression()
@@ -47,4 +47,12 @@ regr.fit(diabetes_X_train, diabetes_y_train)
 
 
 diabetes_y_pred = regr.predict(diabetes_X_test)
-print(diabetes_y_pred)
+#print(diabetes_y_pred)
+
+# The coefficients
+print('Coefficients: \n', regr.coef_)
+# The mean squared error
+print("Mean squared error: %.2f"
+      % mean_squared_error(diabetes_y_test, diabetes_y_pred))
+# Explained variance score: 1 is perfect prediction
+print('Variance score: %.2f' % r2_score(diabetes_y_test, diabetes_y_pred))
