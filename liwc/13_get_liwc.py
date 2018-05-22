@@ -55,5 +55,5 @@ def main(infname,outfname):
 
 
 infname='../datanew.csv'
-ofname='../Get_LIWC_240.csv'
+ofname='../Get_LIWC.csv'
 main(infname,ofname)
