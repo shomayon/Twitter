@@ -8,7 +8,7 @@ import pandas as pd
 import pyprind as pp
 import oauth_info as auth  # our local file with the OAuth infos
 
-
+#
 
 class TimelineMiner(object):
     def __init__(self, access_token, access_secret, consumer_key, consumer_secret, user_name):

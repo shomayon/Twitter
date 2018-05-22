@@ -4,6 +4,7 @@ import json
 
 
 #This code search twitter for keywords to identify users who have shared their mental health diagnosis
+#Another method to search twitter public tweets
 
 m = [] #list of match tweet's text
 l = [] #list of match tweet's Username
@@ -155,15 +156,6 @@ with open('Data.csv', 'w', newline='') as csvfile:
     writer.writeheader()
     for i, j in zip(l, m):
         writer.writerow({'Username': i, 'Text': j})
-
-
-# Open File
-#resultFyle = open("username.csv",'w')
-
-# Write data to file
-#for r in l:
-#    resultFyle.write(r + "\n")
-#resultFyle.close()
 
 
 
