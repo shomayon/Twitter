@@ -5,6 +5,10 @@ import nltk
 import csv
 
 
+#This code Twitter Rest API : Initially search for certain keywords. return username and text in Data1.csv file
+
+
+
 import twitter
 
 import oauthlib

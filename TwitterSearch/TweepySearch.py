@@ -3,6 +3,8 @@ import tweepy
 import csv #Import csv
 import os
 
+# Crusor methot for seaching twitter public tweets for certain keywords
+
 # Consumer keys and access tokens, used for OAuth
 consumer_key = 'GwpuXi1ZMyc0ATSb3FEPaTyOU'
 consumer_secret = '0Y1jaPrDOa0uGsxQc4DSDphRWPPYCtVZ0TtvgZorAvzywIZtXJ'
