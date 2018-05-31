@@ -13,6 +13,8 @@ api = twitter.Api(consumer_key='GwpuXi1ZMyc0ATSb3FEPaTyOU',
   access_token_key='220846580-ZUElx1lLAd5XRxrL9hYVG6CBkbjLUl3ftvCGIMqE',
   access_token_secret='WEFkSeH59z92ptB76tGKnh8l6mMKmWN1fVKqV6dYCuc77')
 
+
+word = ['Anxiety','depression','Bipolar', 'schizophrenia','disorder', 'PTSD', 'ADHD', 'Attention Deficit Hyperactivity Disorder']
 m=[]
 l= []
 search = api.GetSearch(['I have been diagnosed with Anxiety']) # Replace any words with your search
