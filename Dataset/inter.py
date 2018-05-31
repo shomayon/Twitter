@@ -340,5 +340,6 @@ if __name__ == '__main__':
         print("[\033[91m!\033[0m] Twitter error: %s" % e)
     except Exception as e:
         print("[\033[91m!\033[0m] Error: %s" % e)
+        
 
 

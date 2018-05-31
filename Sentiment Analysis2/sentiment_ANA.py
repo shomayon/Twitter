@@ -51,13 +51,15 @@ display(data.head(100))
 data['len']  = np.array([len(tweet.text) for tweet in tweets])
 data['ID']   = np.array([tweet.id for tweet in tweets])
 data['Date'] = np.array([tweet.created_at for tweet in tweets])
-#data['Source'] = np.array([tweet.source for tweet in tweets])
+data['Source'] = np.array([tweet.source for tweet in tweets])
 data['Likes']  = np.array([tweet.favorite_count for tweet in tweets])
 data['RTs']    = np.array([tweet.retweet_count for tweet in tweets])
 display(data.head(100))
 # extract the mean of lenghts:
 mean = np.mean(data['len'])
 print("The lenght's average in tweets: {}".format(mean))
+
+
 
 tlen = pd.Series(data=data['len'].values, index=data['Date'])
 tlen.plot(figsize=(16,4), color='r')
