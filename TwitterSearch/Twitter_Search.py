@@ -32,7 +32,7 @@ try:
 
 
     tso = TwitterSearchOrder() # create a TwitterSearchOrder object
-    tso.set_keywords(['I have been diagnosed with depression' ]) # let's define words we would like to have a look for
+    tso.set_keywords(['I have been diagnosed with depression']) # let's define words we would like to have a look for
     tso.set_language('en') # we want to see English tweets only
     tso.set_include_entities(False)
 
@@ -155,15 +155,3 @@ with open('Data.csv', 'w', newline='') as csvfile:
     writer.writeheader()
     for i, j in zip(l, m):
         writer.writerow({'Username': i, 'Text': j})
-
-
-# Open File
-#resultFyle = open("username.csv",'w')
-
-# Write data to file
-#for r in l:
-#    resultFyle.write(r + "\n")
-#resultFyle.close()
-
-
-
