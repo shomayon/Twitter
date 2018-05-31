@@ -26,7 +26,8 @@ csvWriter = csv.writer(csvFile)
 #(api.user_timeline, username="line", tweet_mode='extended').items(1)
 
 ids = set()
-for tweet in tweepy.Cursor(api.user_timeline, username="shideh66", tweet_mode='extended').items(10):
+for tweet in tweepy.Cursor(api.user_timeline, username="shideh66", tweet_mode='extended').items(1):
+
 
   if not tweet.retweeted and 'RT @' not in tweet._json['full_text']:
         #Write a row to the csv file/ I use encode utf-8
