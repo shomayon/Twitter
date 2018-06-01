@@ -16,8 +16,15 @@ It supports OAuth 1.0 and OAuth 2.0 authentication. And, it works with the lates
 Technologies Used:
 
 1-Tweepy - A python wrapper for the Twitter API
+
+
 2-TextBlob - A wrapper around NLTK, used for sentiment analysis and tweet language translation.
+
+
+
 3-Pandas - for data manipulation and cleaning
+
+
 
 
 How to run the above codes? (Will provide a detailed guide later )
