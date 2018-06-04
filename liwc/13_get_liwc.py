@@ -54,6 +54,6 @@ def main(infname,outfname):
 
 
 
-infname='../datanew.csv'
-ofname='../Get_LIWC_240.csv'
+infname='../SentimentAnalyzer3/DATA/merged/Merged_all_fornow.csv'
+ofname='../Get_LIWC_merged.csv'
 main(infname,ofname)
