@@ -4,10 +4,12 @@ import re
 import string
 
 # Consumer keys and access tokens, used for OAuth
-consumer_key = 'GwpuXi1ZMyc0ATSb3FEPaTyOU'
-consumer_secret = '0Y1jaPrDOa0uGsxQc4DSDphRWPPYCtVZ0TtvgZorAvzywIZtXJ'
-access_token = '220846580-ZUElx1lLAd5XRxrL9hYVG6CBkbjLUl3ftvCGIMqE'
-access_token_secret = 'WEFkSeH59z92ptB76tGKnh8l6mMKmWN1fVKqV6dYCuc77'
+consumer_key="GwpuXi1ZMyc0ATSb3FEPaTyOU"
+consumer_secret="0Y1jaPrDOa0uGsxQc4DSDphRWPPYCtVZ0TtvgZorAvzywIZtXJ"
+
+
+access_token="220846580-ZUElx1lLAd5XRxrL9hYVG6CBkbjLUl3ftvCGIMqE"
+access_token_secret="WEFkSeH59z92ptB76tGKnh8l6mMKmWN1fVKqV6dYCuc77"
 
 # OAuth process, using the keys and tokens
 auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
@@ -20,7 +22,7 @@ alltweet =[]
 tweet =[]
 with open('..//TwitterSearch/test10user.csv') as f:
     for line in f:
-     for status in tweepy.Cursor(api.user_timeline, screen_name=line, tweet_mode='extended', lang= 'en').items(100):
+     for status in tweepy.Cursor(api.user_timeline, screen_name=line, tweet_mode='extended', lang= 'en').items(3200):
          if not status.retweeted and 'RT @' not in status._json['full_text']:
           alltweet.append(status._json['full_text'])
 
@@ -63,7 +65,7 @@ for val in alltweet:
 str_list = list(filter(None, tweet)) #remove empty string
 
 #write tweets in csv file
-with open("1000tweet.csv",'w') as f:
+with open("1000tweet2.csv",'w') as f:
     writer = csv.writer(f, dialect='excel')
     for t in str_list:
 
