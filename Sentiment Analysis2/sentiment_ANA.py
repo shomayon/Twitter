@@ -31,7 +31,7 @@ extractor = twitter_setup()
 
 
 # create a tweet list as follows:
-tweets = extractor.user_timeline(screen_name="Kyashi_Cosplay", count=50)
+tweets = extractor.user_timeline(screen_name="shideh66", count=50)
 print(tweets)
 
 
