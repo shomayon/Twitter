@@ -20,10 +20,7 @@ alltweet =[]
 tweet =[]
 with open('..//SentimentAnalzer3/Data/merged/Merged_all_fornow.csv') as f:
     for line in f:
-     for status in tweepy.Cursor(api.user_timeline, screen_name=line, tweet_mode='extended', lang= 'en').items(100):
-         if not status.retweeted and 'RT @' not in status._json['full_text']:
-          alltweet.append(status._json['full_text'])
-
+        print()
 
 
 

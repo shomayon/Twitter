@@ -1,10 +1,13 @@
 import word_category_counter as wc
 import csv, os, sys
+import pandas as pd
 
 def read_file(f):
-	infile=open(f,'r',encoding="utf8")
-	inlines=infile.readlines()
-	return inlines
+	# infile=open(f,'r',encoding="utf8")
+	# inlines=infile.readlines()
+	inlines = pd.read_csv(f)
+	print("num of lines = ",inlines.shape[0])
+	return inlines['text'].values
 
 def write_csv(filename, rows, header_fields=None):
     with open(filename, 'w', encoding="utf8", newline='') as csvfile:
@@ -55,5 +58,6 @@ def main(infname,outfname):
 
 
 infname='../SentimentAnalyzer3/DATA/merged/Merged_all_fornow.csv'
-ofname='../Get_LIWC_merged.csv'
+#infname='../labeled_tweets.csv'
+ofname='../dataset_features_test.csv'
 main(infname,ofname)

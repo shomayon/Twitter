@@ -164,10 +164,10 @@ def get_friends(api, username, limit):
     """ Download friends and process them """
     for friend in tqdm(tweepy.Cursor(api.friends, screen_name=username).items(limit), unit="friends", total=limit):
         process_friend(friend)
-def get_friends(api, username, limit):
-    """ Download friends and process them """
-    for friend in tqdm(tweepy.Cursor(api.friends, screen_name=username).items(limit), unit="friends", total=limit):
-        process_friend(friend)
+# def get_friends(api, username, limit):
+#     """ Download friends and process them """
+#     for friend in tqdm(tweepy.Cursor(api.friends, screen_name=username).items(limit), unit="friends", total=limit):
+#         process_friend(friend)
 
 
 def get_tweets(api, username, limit):

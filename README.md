@@ -13,5 +13,19 @@ TwitterSearch is also available on pypi and therefore can be installed via pip i
 It supports OAuth 1.0 and OAuth 2.0 authentication. And, it works with the latest Python versions in both 2.x and 3.x branches.
 
 
+Technologies Used:
+
+1-Tweepy - A python wrapper for the Twitter API
+
+
+2-TextBlob - A wrapper around NLTK, used for sentiment analysis and tweet language translation.
+
+
+
+3-Pandas - for data manipulation and cleaning
+
+
+
+
 How to run the above codes? (Will provide a detailed guide later )
 Clone the repository to your machine.
