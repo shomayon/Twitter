@@ -6,15 +6,6 @@ import string
 
 alltweet =[]
 tweet =[]
-# infname='SentimentAnalyzer3/DATA/merged/Merged_all_fornow.csv'
-#with open('Merged_all_fornow.csv') as f:
-#    for line in f:
-#        myName = [line.strip() for line in f]
-#        strip_links(myName)
-     #  print(myName)
-        #print("n")
-
-
 
 def strip_links(text):
     link_regex    = re.compile('((https?):((//)|(\\\\))+([\w\d:#@%/;$()~_?\+-=\\\.&](#!)?)*)', re.DOTALL)
@@ -22,7 +13,7 @@ def strip_links(text):
     for link in links:
         text = text.replace(link[0], ', ')
     return text
-
+		
 def strip_all_entities(text):
     entity_prefixes = ['@','#']
     for separator in  string.punctuation:
@@ -38,17 +29,15 @@ def strip_all_entities(text):
                 words.append(word)
     return ' '.join(words)
 
-with open('labeled_tweets.csv') as f:
+with open('labeled_tweets.csv','r', encoding="utf-8") as f:
     for line in f:
-       cleanline = strip_all_entities(strip_links(line))
-       alltweet.append(cleanline)
-        #myName = [line.strip() for line in f]
-        #print("n")
+        cleanline = strip_all_entities(strip_links(line))
+        alltweet.append(cleanline)
 
 with open("cleandata.csv",'w') as f:
-     writer = csv.writer(f,dialect='excel')
-     for t in alltweet:
-         writer.writerow([t])
+    writer = csv.writer(f,dialect='excel')
+    for t in alltweet:
+        writer.writerow([t])
 
 
 
@@ -64,9 +53,3 @@ with open("cleandata.csv",'w') as f:
 
 str_list = list(filter(None, tweet)) #remove empty string
 
-#write tweets in csv file
-#with open("1000tweet.csv",'w') as f:
-#    writer = csv.writer(f, dialect='excel')
-#    for t in str_list:
-
- #       writer.writerow([t])
