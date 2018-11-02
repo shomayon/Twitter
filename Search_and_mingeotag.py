@@ -1,37 +1,22 @@
 
 import csv
 import twitter
-#import oauthlib
 import tweepy
 import collections
 import pandas as pd
 
-# Rest API
-#import json
-#import csv
+
 import twitter
-#import oauthlib
 
 dict_ = {'user':[],'text':[],'place':[],'created_at':[]}
-# Creation of the actual interface, using authentication
-# Consumer keys and access tokens, used for OAuth
 consumer_key="GwpuXi1ZMyc0ATSb3FEPaTyOU"
 consumer_secret="0Y1jaPrDOa0uGsxQc4DSDphRWPPYCtVZ0TtvgZorAvzywIZtXJ"
 
 access_token="220846580-ZUElx1lLAd5XRxrL9hYVG6CBkbjLUl3ftvCGIMqE"
 access_token_secret="WEFkSeH59z92ptB76tGKnh8l6mMKmWN1fVKqV6dYCuc77"
-# OAuth process, using the keys and tokens
+
 auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
-# auth.set_access_token(access_token, access_token_secret)
-# # Creation of the actual interface, using authentication
 api2 = tweepy.API(auth)
-#
-
-
-detected_places = collections.Counter()
-alluser =[]
-alltweet= []
-geo_enabled_tweets = 0
 
 
 api = twitter.Api(consumer_key='GwpuXi1ZMyc0ATSb3FEPaTyOU',
@@ -45,8 +30,7 @@ api = twitter.Api(consumer_key='GwpuXi1ZMyc0ATSb3FEPaTyOU',
 keyword1 = ['depression','dep']
 keyword2= ['sad','depressed', 'blue', 'upset','lonely']
 keyword3= ['my suicide attempt','my life is a failure']
-m=[]
-l= []
+
 
 
 for i in keyword1:
