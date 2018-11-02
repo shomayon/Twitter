@@ -32,7 +32,7 @@ extractor = twitter_setup()
 
 
 # create a tweet list as follows:
-tweets = extractor.user_timeline(screen_name="Kyashi_Cosplay", count=10)
+tweets = extractor.user_timeline(screen_name="shideh66", count=10)
 #print(tweets)
 
 def getTime(tweet,latit,long):
@@ -43,10 +43,11 @@ def getTime(tweet,latit,long):
       #convert to local time
       utc_time = dt.datetime.strptime(tweet["created_at"], '%a %b %d %H:%M:%S +0000 %Y').replace(tzinfo=pytz.UTC)
       local_time = utc_time.replace(tzinfo=pytz.utc).astimezone(timezone)
-      time = local_time.strftime('%Y-%m-%d %H:%M:%S')
+      time = local_time.strftime(format='%a %b %d %H:%M:%S +0000 %Y')
       print(time)
 
 def store(tweet):
+      print(store)
       if tweet["place"] is None:
             geolocator = Nominatim(user_agent="mental_health")
             location = geolocator.geocode(tweet["user"]["location"])
@@ -56,11 +57,11 @@ def store(tweet):
             long = tweet["place"]["bounding_box"]["coordinates"][0][0][0]
             getTime(tweet,latit,long)
  
-      #print(tweet.txt)
-    #  print(json.dumps(tweet,indent=3))
+      print(json.dumps(tweet,indent=3))
 
 for tweet in tweets[:20]:
       if not tweet.retweeted and 'RT @' not in tweet.text:
+            print(tweet)
     #        print(tweet.text)
             store(tweet._json)
 
