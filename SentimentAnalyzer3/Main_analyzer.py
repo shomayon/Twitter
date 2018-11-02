@@ -12,6 +12,12 @@ from ascii_graph import Pyasciigraph
 from ascii_graph.colors import Gre, Yel, Red
 from ascii_graph.colordata import hcolor
 from tqdm import tqdm
+from timezonefinder import TimezoneFinder
+import datetime as dt
+from geopy.geocoders import Nominatim
+from pprint import pprint
+import pytz
+import json
 import tweepy
 import numpy
 import argparse
@@ -77,6 +83,28 @@ id_screen_names = {}
 friends_timezone = collections.Counter()
 friends_lang = collections.Counter()
 
+def getTime(tweet,latit,long):
+      #get timezone
+      zone = TimezoneFinder().timezone_at(lng=long,lat= latit)
+      timezone = pytz.timezone(zone) #convert zone string to pytz format
+
+      #convert to local time
+      utc_time = dt.datetime.strptime(tweet["created_at"], '%a %b %d %H:%M:%S +0000 %Y').replace(tzinfo=pytz.UTC)
+      local_time = utc_time.replace(tzinfo=pytz.utc).astimezone(timezone)
+    #  finaltime = local_time.strftime(format='%Y-%m-%d %H:%M:%S')
+      return local_time
+
+def store(tweet):
+      if tweet["place"] is None:
+            geolocator = Nominatim(user_agent="mental_health")
+            location = geolocator.geocode(tweet["user"]["location"])
+            locationtime = getTime(tweet,location.latitude,location.longitude)
+      else:
+            latit = tweet["place"]["bounding_box"]["coordinates"][0][0][1]
+            long = tweet["place"]["bounding_box"]["coordinates"][0][0][0]
+            locationtime = getTime(tweet,latit,long)
+      return locationtime
+    #  print(json.dumps(tweet,indent=3))
 
 def process_tweet(tweet):
     """ Processing a single Tweet and updating our datasets """
@@ -84,14 +112,12 @@ def process_tweet(tweet):
     global end_date
     global geo_enabled_tweets
     global retweets
-
     # Check for filters before processing any further
     if args.filter and tweet.source:
         if not args.filter.lower() in tweet.source.lower():
             return
-
-    tw_date = tweet.created_at
-
+    # get correct time
+    tw_date = store(tweet._json)
     # Updating most recent tweet
     end_date = end_date or tw_date
     start_date = tw_date
@@ -108,13 +134,6 @@ def process_tweet(tweet):
         retweets += 1
     except:
         pass
-
-    # Adding timezone from profile offset to set to local hours
-    if tweet.user.utc_offset and not args.no_timezone:
-        tw_date = (tweet.created_at + datetime.timedelta(seconds=tweet.user.utc_offset))
-
-    if args.utc_offset:
-        tw_date = (tweet.created_at + datetime.timedelta(seconds=args.utc_offset))
 
     # Updating our activity datasets (distribution maps)
     activity_hourly["%s:00" % str(tw_date.hour).zfill(2)] += 1
@@ -168,8 +187,32 @@ def get_friends(api, username, limit):
 #     """ Download friends and process them """
 #     for friend in tqdm(tweepy.Cursor(api.friends, screen_name=username).items(limit), unit="friends", total=limit):
 #         process_friend(friend)
+"""
+def getTime(tweet,latit,long):
+      #get timezone
+      zone = TimezoneFinder().timezone_at(lng=long,lat= latit)
+      timezone = pytz.timezone(zone) #convert zone string to pytz format
 
+      #convert to local time
+      utc_time = dt.datetime.strptime(tweet["created_at"], '%a %b %d %H:%M:%S +0000 %Y').replace(tzinfo=pytz.UTC)
+      local_time = utc_time.replace(tzinfo=pytz.utc).astimezone(timezone)
+      time = local_time.strftime(format='%a %b %d %H:%M:%S +0000 %Y')
+      return time
+#      print(time)
 
+def store(tweet):
+      if tweet["place"] is None:
+            geolocator = Nominatim(user_agent="mental_health")
+            location = geolocator.geocode(tweet["user"]["location"])
+            getTime(tweet,location.latitude,location.longitude)
+      else:
+            latit = tweet["place"]["bounding_box"]["coordinates"][0][0][1]
+            long = tweet["place"]["bounding_box"]["coordinates"][0][0][0]
+            getTime(tweet,latit,long)
+
+      #print(tweet.txt)
+    #  print(json.dumps(tweet,indent=3))
+"""
 def get_tweets(api, username, limit):
     alltweet =[]
     fid2 = open(args.name + '_3200unfilteredTweets.csv','w')
@@ -179,8 +222,8 @@ def get_tweets(api, username, limit):
                        unit="tw", total=limit):
 
         alltweet.append(status.full_text)
+    #    store(status._json)        
         process_tweet(status)
-
     for line in alltweet:
        fid2.write("%s\n"%line)
 
