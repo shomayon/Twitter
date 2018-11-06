@@ -22,27 +22,28 @@ api2 = tweepy.API(auth)
 api = twitter.Api(consumer_key='GwpuXi1ZMyc0ATSb3FEPaTyOU',
                   consumer_secret='0Y1jaPrDOa0uGsxQc4DSDphRWPPYCtVZ0TtvgZorAvzywIZtXJ',
                   access_token_key='220846580-ZUElx1lLAd5XRxrL9hYVG6CBkbjLUl3ftvCGIMqE',
-                  access_token_secret='WEFkSeH59z92ptB76tGKnh8l6mMKmWN1fVKqV6dYCuc77')
+                  access_token_secret='WEFkSeH59z92ptB76tGKnh8l6mMKmWN1fVKqV6dYCuc77',
+                  tweet_mode='extended')
 
 
 
 
 keyword1 = ['depression','dep']
-keyword2= ['sad','depressed', 'blue', 'upset','lonely']
+keyword2= ['depressed', 'blue', 'upset','lonely']
 keyword3= ['my suicide attempt','my life is a failure']
 
 
 
 for i in keyword1:
-    str= ('I have been diagnosed with'+i)
+    str= ('I have been diagnosed with '+i)
     search = api.GetSearch([str])
 
     for tweet in search:
-       if not tweet.retweeted and 'RT @' not in tweet.text:
+       if not tweet.retweeted and 'RT @' not in tweet.full_text:
             if tweet.place or tweet.user.location:
 
              dict_['user'].append(tweet.user.screen_name)
-             dict_['text'].append(tweet.text)
+             dict_['text'].append(tweet.full_text)
              dict_['place'].append(tweet.user.location)
              dict_['created_at'].append(tweet.created_at)
 
@@ -53,11 +54,11 @@ for i in keyword2:
     search = api.GetSearch([str])
 
     for tweet in search:
-        if not tweet.retweeted and 'RT @' not in tweet.text:
+        if not tweet.retweeted and 'RT @' not in tweet.full_text:
             if tweet.place or tweet.user.location:
 
                 dict_['user'].append(tweet.user.screen_name)
-                dict_['text'].append(tweet.text)
+                dict_['text'].append(tweet.full_text)
                 dict_['place'].append(tweet.user.location)
                 dict_['created_at'].append(tweet.created_at)
 
@@ -66,13 +67,13 @@ for i in keyword3:
     search = api.GetSearch(i)
 
     for tweet in search:
-        if not tweet.retweeted and 'RT @' not in tweet.text:
+        if not tweet.retweeted and 'RT @' not in tweet.full_text:
             if tweet.place or tweet.user.location:
 
               dict_['user'].append(tweet.user.screen_name)
-              dict_['text'].append(tweet.text)
+              dict_['text'].append(tweet.full_text)
               dict_['place'].append(tweet.user.location)
               dict_['created_at'].append(tweet.created_at)
 
 df = pd.DataFrame(dict_)
-print(df)
+#print(df.text)
