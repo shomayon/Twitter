@@ -35,8 +35,8 @@ keyword3= ['my suicide attempt','my life is a failure']
 
 
 for i in keyword1:
-    str= ('I have been diagnosed with '+i)
-    search = api.GetSearch([str])
+    line= ('I have been diagnosed with '+i)
+    search = api.GetSearch([line])
 
     for tweet in search:
        if not tweet.retweeted and 'RT @' not in tweet.full_text:
@@ -50,8 +50,8 @@ for i in keyword1:
 
 
 for i in keyword2:
-    str= ('I feel '+i)
-    search = api.GetSearch([str])
+    line = ('I feel '+i)
+    search = api.GetSearch([line])
 
     for tweet in search:
         if not tweet.retweeted and 'RT @' not in tweet.full_text:
@@ -63,7 +63,7 @@ for i in keyword2:
                 dict_['created_at'].append(tweet.created_at)
 
 for i in keyword3:
-    str= (i)
+    line= (i)
     search = api.GetSearch(i)
 
     for tweet in search:
@@ -76,4 +76,5 @@ for i in keyword3:
               dict_['created_at'].append(tweet.created_at)
 
 df = pd.DataFrame(dict_)
-#print(df.text)
+for row in range(df.shape[0]):
+    print(str(row) + ' ---- ' + df[['user']].values[row][0] + ' ---- ' + df[['text']].values[row][0])
