@@ -39,7 +39,7 @@ from secrets import consumer_key, consumer_secret, access_token, access_token_se
 
 parser = argparse.ArgumentParser(description=
                                  '')
-parser.add_argument('-l', '--limit', metavar='N', type=int, default=300,
+parser.add_argument('-l', '--limit', metavar='N', type=int, default=3200,
                     help='limit the number of tweets to retreive (default=1000)')
 parser.add_argument('-n', '--name', required=True, metavar="screen_name",
                     help='target screen_name')
@@ -192,14 +192,12 @@ def getTime(tweet,latit,long):
       #get timezone
       zone = TimezoneFinder().timezone_at(lng=long,lat= latit)
       timezone = pytz.timezone(zone) #convert zone string to pytz format
-
       #convert to local time
       utc_time = dt.datetime.strptime(tweet["created_at"], '%a %b %d %H:%M:%S +0000 %Y').replace(tzinfo=pytz.UTC)
       local_time = utc_time.replace(tzinfo=pytz.utc).astimezone(timezone)
       time = local_time.strftime(format='%a %b %d %H:%M:%S +0000 %Y')
       return time
 #      print(time)
-
 def store(tweet):
       if tweet["place"] is None:
             geolocator = Nominatim(user_agent="mental_health")
@@ -209,7 +207,6 @@ def store(tweet):
             latit = tweet["place"]["bounding_box"]["coordinates"][0][0][1]
             long = tweet["place"]["bounding_box"]["coordinates"][0][0][0]
             getTime(tweet,latit,long)
-
       #print(tweet.txt)
     #  print(json.dumps(tweet,indent=3))
 """
