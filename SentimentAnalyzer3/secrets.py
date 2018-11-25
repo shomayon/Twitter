@@ -1,7 +1,7 @@
 
-consumer_key="GwpuXi1ZMyc0ATSb3FEPaTyOU"
-consumer_secret="0Y1jaPrDOa0uGsxQc4DSDphRWPPYCtVZ0TtvgZorAvzywIZtXJ"
+consumer_key="PLoBOvek1BRQUCe9sUqIb8nlS"
+consumer_secret="WpuhSqp5944W3Xt5oTHtJCje25840clSwJ9s7UEbkcAdgveONO"
 
 
-access_token="220846580-ZUElx1lLAd5XRxrL9hYVG6CBkbjLUl3ftvCGIMqE"
-access_token_secret="WEFkSeH59z92ptB76tGKnh8l6mMKmWN1fVKqV6dYCuc77"
+access_token="1054970208803344384-ptpHbL3nmxP9RLNFcse4dtjfs9Bbw2"
+access_token_secret="MtOLdYvf8Ib7osqGEJaQKJgkAeDyIHMqKdL253uhYqpRf"
