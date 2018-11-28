@@ -46,7 +46,7 @@ class StreamListener(tweepy.StreamListener):
 
         table = db[secrets.TABLE_NAME]
         try:
-            table.inset(dict(
+            table.insert(dict(
                 user_description=description,
                 user_location=loc,
                 coordinates=coords,
@@ -62,22 +62,24 @@ class StreamListener(tweepy.StreamListener):
                 polarity=sent.polarity,
                 subjectivity=sent.subjectivity,
             ))
-        except ProgramminError as err:
+        except ProgrammingError as err:
             print(err)
 
     #disconnect when reached rate limit for API
     def on_error(self, status_code):
         if status_code == 420:
+            print("Rate limit reached")
             #returning False in on_data disconnects the stream
             return False
 
-def main():
-    auth = tweepy.OAuthHandler(secrets.TWITTER_APP_KEY, secrets.TWITTER_APP_SECRET)
-    auth.set_access_token(secrets.TWIITER_KEY, secrets.TWITTER_SECRET)
-    api = tweepy.API(auth)
+auth = tweepy.OAuthHandler(secrets.TWITTER_APP_KEY, secrets.TWITTER_APP_SECRET)
+auth.set_access_token(secrets.TWITTER_KEY, secrets.TWITTER_SECRET)
+api = tweepy.API(auth)
 
-    #create instance of StreamListener class
-    stream_listener = StreamListener()
-    #create instance of tweepy Stream class which streams tweets
-    stream = tweepy.Stream(auth=api.auth, listener=stream_listener)
-    stream.filter(track=secrets.TRACK_TERMS)
+#create instance of StreamListener class
+stream_listener = StreamListener()
+#create instance of tweepy Stream class which streams tweets
+stream = tweepy.Stream(auth=api.auth, listener=stream_listener)
+stream.filter(follow=["1054970208803344384"])
+#stream.filter(track=secrets.TRACK_TERMS)
+#stream.filter(follow=["26459251"])
