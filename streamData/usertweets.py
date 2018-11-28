@@ -1,8 +1,17 @@
+# Individual user csv files will be saved to
+# directory "twitter_data"
+# This script gathers the tweets of a user
+# and will also update the csv file of the most recent
+# tweets since the last fetch
+
+
+
 import tweepy #https://github.com/tweepy/tweepy
 import csv
 import secrets
 import json
 import os
+from pathlib import Path
 
 def get_all_tweets(screen_name):
     #Twitter only allows access to a users most recent 3240 tweets with this method
@@ -14,16 +23,23 @@ def get_all_tweets(screen_name):
 
     max_id = 0
     file_name = screen_name+'_tweets.csv' 
-    if os.path.exists(file_name):
+    dir_path = os.path.dirname(os.path.realpath(__file__))
+    path = Path(dir_path+'/twitter_data/'+file_name)
+    path.parent.mkdir(parents = True, exist_ok=True)
+    
+    if path.exists():
         print("...User file exists already")
-        with open(file_name, 'r') as f:
+        with open(path, 'r') as f:
             for row in csv.DictReader(f):
                 since_id = row["Tweet_ID"]
-                break
+                if since_id is None:
+                    print("Existing user file is empty")
+                    return
+                else:
+                    break
         newtweets = []
         
         recent_tweets = api.user_timeline(screen_name = screen_name, count = 200, since_id = since_id)
-        #recent_tweets = api.user_timeline(screen_name = screen_name, count = 200)
         newtweets.extend(recent_tweets)
     
         #oldest = newtweets[-1].id -1
@@ -48,14 +64,16 @@ def get_all_tweets(screen_name):
                         tweet.created_at,
                         tweet.text.encode("utf-8")]
                         for tweet in newtweets]
-            with open(file_name, newline='') as f:
+            with open(path, newline='') as f:
+                next(f)
                 r = csv.reader(f)
                 data = [line for line in r]
-            with open(file_name, 'w', encoding='utf8', newline='') as f:
+            with open(path, 'w', encoding='utf8', newline='') as f:
                 writer = csv.writer(f)
                 writer.writerow(["Tweet_ID", "Time", "Tweet"])
                 writer.writerows(outtweet)
                 writer.writerows(data)
+            f.close()
             pass
 
     else:
@@ -90,8 +108,8 @@ def get_all_tweets(screen_name):
                     tweet.text.encode("utf-8")]
                     for tweet in alltweets]	
         #write the csv	
-
-        with open(file_name, 'a', encoding='utf8') as f:
+        
+        with open(path, 'a', encoding='utf8') as f:
             writer = csv.writer(f)
             writer.writerow(["Tweet_ID", "Time", "Tweet"])
             writer.writerows(outtweets)
