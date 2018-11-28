@@ -11,7 +11,13 @@ import csv
 import secrets
 import json
 import os
+import pandas as pd
+import numpy as np
+from IPython.display import display
+import matplotlib.pyplot as plt
+import seaborn as sns
 from pathlib import Path
+import users
 
 def get_all_tweets(screen_name):
     #Twitter only allows access to a users most recent 3240 tweets with this method
@@ -28,7 +34,7 @@ def get_all_tweets(screen_name):
     path.parent.mkdir(parents = True, exist_ok=True)
     
     if path.exists():
-        print("...User file exists already")
+        print("...%s file exists already" % screen_name)
         with open(path, 'r') as f:
             for row in csv.DictReader(f):
                 since_id = row["Tweet_ID"]
@@ -77,8 +83,7 @@ def get_all_tweets(screen_name):
             pass
 
     else:
-        print("User file does not exist")
-	
+        print("...%s file does not exist" % screen_name)
         #initialize a list to hold all the tweepy Tweets
         alltweets = []	
         #make initial request for most recent tweets (200 is the maximum allowed count)
@@ -108,14 +113,15 @@ def get_all_tweets(screen_name):
                     tweet.text.encode("utf-8")]
                     for tweet in alltweets]	
         #write the csv	
-        
+
         with open(path, 'a', encoding='utf8') as f:
             writer = csv.writer(f)
             writer.writerow(["Tweet_ID", "Time", "Tweet"])
             writer.writerows(outtweets)
         pass
 
-
 if __name__ == '__main__':
     #pass in the username of the account you want to download
-    get_all_tweets("girlbosskaty")
+    for user in users.SCREEN_NAME:
+        get_all_tweets(user)
+        print("\n")   
