@@ -8,17 +8,7 @@ import dataset
 import secrets
 from sqlalchemy.exc import ProgrammingError
 
-def main():
-    auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
-    auth.set_access_token(access_token, access_token_secret)
-    api = tweepy.API(auth)
-
-    #create instance of StreamListener class
-    stream_listener = StreamListener()
-    #create instance of tweepy Stream class which streams tweets
-    stream = tweepy.Stream(auth=api.auth, listener=stream_listener)
-    stream.filter(track=["trump","clinton","hillary clinton","donald trump"])
-    db = dataset.connect("sqlite:///tweets.db")
+db = dataset.connect(secrets.CONNECTION_STRING)
 
 #Setting up a listener to print text 
 class StreamListener(tweepy.StreamListener):
@@ -52,9 +42,9 @@ class StreamListener(tweepy.StreamListener):
             geo = json.dumps(geo)
 
         if coords is not None:
-            coords = json.dumps(coords
+            coords = json.dumps(coords)
 
-        table = db[settings.TABLE_NAME]
+        table = db[secrets.TABLE_NAME]
         try:
             table.inset(dict(
                 user_description=description,
@@ -81,3 +71,13 @@ class StreamListener(tweepy.StreamListener):
             #returning False in on_data disconnects the stream
             return False
 
+def main():
+    auth = tweepy.OAuthHandler(secrets.TWITTER_APP_KEY, secrets.TWITTER_APP_SECRET)
+    auth.set_access_token(secrets.TWIITER_KEY, secrets.TWITTER_SECRET)
+    api = tweepy.API(auth)
+
+    #create instance of StreamListener class
+    stream_listener = StreamListener()
+    #create instance of tweepy Stream class which streams tweets
+    stream = tweepy.Stream(auth=api.auth, listener=stream_listener)
+    stream.filter(track=secrets.TRACK_TERMS)
