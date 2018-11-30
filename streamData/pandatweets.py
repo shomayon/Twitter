@@ -55,31 +55,11 @@ def get_all_tweets(screen_name):
                 print ("...%s has %d new tweet"% (screen_name, len(recent_tweets)))
             else:
                 print("...%s has %d new tweets" % (screen_name, len(recent_tweets)))
-            """           
-            while len(recent_tweets) > 0:
-                print("getting tweets before %s", oldest)
-                recent_tweets = api.user_timeline(screen_name= screen_name, count = 200, max_id = oldest, since_id = since_id)
-                newtweets.extend(recent_tweets)
-                oldest = newtweets[-1].id-1
-                print("...%s tweets have been downloaded so far", len(newtweets))
-            """
-            """
-            outtweet = [[
-                        tweet.id_str,
-                        tweet.user.screen_name,
-                        tweet.user.description,
-                        tweet.user.location,
-                        tweet.user.created_at,
-                        tweet.user.geo_enabled,
-                        tweet.coordinates,
-                        tweet.text.encode("utf-8")]
-                        for tweet in newtweets]
             
-            """
             #dataFrame of original tweets from csv file
             df = pd.DataFrame()
             final = pd.DataFrame()
-            col_to_use = ['Tweet_ID','Tweet','Screen_Name','Description','User_Location','Time','Geo_Enabled','Coords']
+            col_to_use = ['Tweet_ID','Tweet','Screen_Name','Description','User_Location','Time','Geo_Enabled','Lat','Long']
             df = pd.read_csv(path, index_col=False,usecols=col_to_use)[col_to_use]
             display(df.head(10))
             # copy new tweets on top of old tweets
@@ -91,16 +71,15 @@ def get_all_tweets(screen_name):
             newdata['User_Location'] = np.array([tweet.user.location for tweet in newtweets])
             newdata['Time'] = np.array([tweet.user.created_at for tweet in newtweets])
             newdata['Geo_Enabled'] = np.array([tweet.user.geo_enabled for tweet in newtweets])
-            newdata['Coords'] = list(map(lambda tweet: tweet.coordinates["coordinates"] if tweet.place != None else None, newtweets))
+           # newdata['Coords'] = list(map(lambda tweet: tweet.coordinates["coordinates"] if tweet.place != None else None, newtweets))
+            newdata['Lat'] = list(map(lambda tweet: tweet.coordinates["coordinates"][1] if tweet.place != None else None, newtweets))
+            newdata['Long'] = list(map(lambda tweet: tweet.coordinates["coordinates"][0] if tweet.place != None else None, newtweets))
             display(newdata.head(10))
             final = newdata.append(df, sort = False)
             print("Concatenated data")
             display(final.head(10))
             #display(newdata.head(10))
             final.to_csv(path, encoding='utf-8', index=False)
-           # with open(path, 'a') as f:
-                #df.append(data)
-            #    df.to_csv(path, encoding='utf-8', header=False)
     else:
         print("...%s file does not exist" % screen_name)
         #initialize a list to hold all the tweepy Tweets
@@ -134,7 +113,9 @@ def get_all_tweets(screen_name):
         data['User_Location'] = np.array([tweet.user.location for tweet in alltweets])
         data['Time'] = np.array([tweet.user.created_at for tweet in alltweets])
         data['Geo_Enabled'] = np.array([tweet.user.geo_enabled for tweet in alltweets])
-        data['Coords'] = list(map(lambda tweet: tweet.coordinates["coordinates"] if tweet.place != None else None, alltweets))
+        #data['Coords'] = list(map(lambda tweet: tweet.coordinates["coordinates"] if tweet.place != None else None, alltweets))
+        data['Lat'] = list(map(lambda tweet: tweet.coordinates["coordinates"][1] if tweet.place != None else None, alltweets))
+        data['Long'] = list(map(lambda tweet: tweet.coordinates["coordinates"][0] if tweet.place != None else None, alltweets))
         display(data.head(10))
         data.to_csv(path, encoding='utf-8', index=False)
 
