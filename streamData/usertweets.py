@@ -67,7 +67,12 @@ def get_all_tweets(screen_name):
             """
             outtweet = [[
                         tweet.id_str,
-                        tweet.created_at,
+                        tweet.user.screen_name,
+                        tweet.user.description,
+                        tweet.user.location,
+                        tweet.user.created_at,
+                        tweet.user.geo_enabled,
+                        tweet.coordinates,
                         tweet.text.encode("utf-8")]
                         for tweet in newtweets]
             with open(path, newline='') as f:
@@ -76,7 +81,14 @@ def get_all_tweets(screen_name):
                 data = [line for line in r]
             with open(path, 'w', encoding='utf8', newline='') as f:
                 writer = csv.writer(f)
-                writer.writerow(["Tweet_ID", "Time", "Tweet"])
+                writer.writerow(["Tweet_ID",
+                                 "Screen_Name",
+                                 "Decription",
+                                 "User_Location",
+                                 "Time",
+                                 "Geo_Enabled",
+                                 "Coords",
+                                 "Tweet"])
                 writer.writerows(outtweet)
                 writer.writerows(data)
             f.close()
@@ -105,19 +117,31 @@ def get_all_tweets(screen_name):
             #update the id of the oldest tweet less one
             oldest = alltweets[-1].id - 1
             print("...%s tweets have been downloaded so far",len(alltweets))
-
         #transforming the tweets into a 2D array that will be used to populate the csv
-        outtweets = [[
-                    tweet.id_str,
-                    tweet.created_at,
-                    tweet.text.encode("utf-8")]
-                    for tweet in alltweets]	
+        outtweets =[[
+                       tweet.id_str,
+                        tweet.user.screen_name,
+                        tweet.user.description,
+                        tweet.user.location,
+                        tweet.user.created_at,
+                        tweet.user.geo_enabled,
+                        tweet.coordinates,
+                        tweet.text.encode("utf-8")]
+                        for tweet in alltweets]
         #write the csv	
 
         with open(path, 'a', encoding='utf8') as f:
             writer = csv.writer(f)
-            writer.writerow(["Tweet_ID", "Time", "Tweet"])
+            writer.writerow(["Tweet_ID",
+                             "Screen_Name",
+                             "Description",
+                             "User_Location",
+                             "Time",
+                             "Geo_Enabled",
+                             "Coords",
+                             "Tweet"])
             writer.writerows(outtweets)
+                    
         pass
 
 if __name__ == '__main__':
