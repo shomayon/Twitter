@@ -59,7 +59,7 @@ def get_all_tweets(screen_name):
             #dataFrame of original tweets from csv file
             df = pd.DataFrame()
             final = pd.DataFrame()
-            col_to_use = ['Tweet_ID','Tweet','Screen_Name','Description','User_Location','Time','Geo_Enabled','Lat','Long']
+            col_to_use = ['Tweet_ID','Tweet','Screen_Name','Description','User_Location','Time','Geo_Enabled','Place','Lat','Long']
             df = pd.read_csv(path, index_col=False,usecols=col_to_use)[col_to_use]
             display(df.head(10))
             # copy new tweets on top of old tweets
@@ -72,6 +72,7 @@ def get_all_tweets(screen_name):
             newdata['Time'] = np.array([tweet.created_at for tweet in newtweets])
             newdata['Geo_Enabled'] = np.array([tweet.user.geo_enabled for tweet in newtweets])
            # newdata['Coords'] = list(map(lambda tweet: tweet.coordinates["coordinates"] if tweet.place != None else None, newtweets))
+            newdata['Place'] = list(map(lambda tweet: tweet.place.full_name if tweet.place != None else None, newtweets))
             newdata['Lat'] = list(map(lambda tweet: tweet.coordinates["coordinates"][1] if tweet.place != None else None, newtweets))
             newdata['Long'] = list(map(lambda tweet: tweet.coordinates["coordinates"][0] if tweet.place != None else None, newtweets))
             display(newdata.head(10))
@@ -114,6 +115,7 @@ def get_all_tweets(screen_name):
         data['Time'] = np.array([tweet.created_at for tweet in alltweets])
         data['Geo_Enabled'] = np.array([tweet.user.geo_enabled for tweet in alltweets])
         #data['Coords'] = list(map(lambda tweet: tweet.coordinates["coordinates"] if tweet.place != None else None, alltweets))
+        data['Place'] = list(map(lambda tweet: tweet.place.full_name if tweet.place != None else None,alltweets))
         data['Lat'] = list(map(lambda tweet: tweet.coordinates["coordinates"][1] if tweet.place != None else None, alltweets))
         data['Long'] = list(map(lambda tweet: tweet.coordinates["coordinates"][0] if tweet.place != None else None, alltweets))
         display(data.head(10))

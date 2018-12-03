@@ -52,21 +52,26 @@ def cleanLocation(user, myGeo):
     dir_path = os.path.dirname(os.path.realpath(__file__))
     path = Path(dir_path+'/twitter_data/'+file_name)
 
-    # fieldnames = ['Tweet_ID','Tweet','Screen_Name','Description','User_Location','Time','Geo_Enabled','Lat','Long']
+    fieldnames = ['Tweet_ID','Tweet','Screen_Name','Description','User_Location','Time','Geo_Enabled','Place','Lat','Long']
+    newfile_name= user+'_updatedtweets.csv'
+    dir_path2 = os.path.dirname(os.path.realpath(__file__))
+    newpath = Path(dir_path2+'/twitter_data/'+newfile_name)
 
     if path.exists():
         print("...%s file found" % user)
-        with open(path, 'r') as infile:
+        with open(path, 'r') as infile, open(newpath,'w') as outfile:
             reader = csv.DictReader(infile)
-            #writer = csv.DictWriter(outfile, fieldnames=reader.fieldnames)  
+            writer = csv.DictWriter(outfile, fieldnames=fieldnames)  
             for row in reader:
                 location = row["User_Location"]
                 time = row["Time"]
+                place = row["Place"]
                 lat = row["Lat"]
                 longit = row["Long"]
+                finaltime = ''
                 if location is None:
                     print("The user has no profile location... Thank you, next")
-                    break
+                    return
                 #Base Case
                 #if the dictionary is empy add the first user location
                 if len(myGeo) == 0:
@@ -76,7 +81,7 @@ def cleanLocation(user, myGeo):
                     timezone = getTimeZone( loc.latitude, loc.longitude)
                     myGeo[location] = timezone               
                     finaltime = getLocalTime(time, timezone)
-                    print(finaltime)
+                    #print(finaltime)
                 else:   #check if individual tweets have a location
                     #check for new user location
                     #if it is not in dictionary add it
@@ -86,15 +91,20 @@ def cleanLocation(user, myGeo):
                         timezone = getTimeZone(loc.latitude, loc.longitude)
                         myGeo[location] = timezone
                         finaltime = getLocalTime(time, timezone)
-                        print(finaltime)
-                    #how to find location given coordinates
-                    if lat and longit is not None:
-                       # timezone = getTimeZone(lat, longit)  
-                        #lat = row["Lat"]
-                        #longit = row["Long"]
-                        print("Tweet has a location")
-                        #print(lat)
-                        #print(longit) 
+                    #if tweet has a location, and it is not in the map, add it
+                    if lat and longit is not None and place not in myGeo:
+                        geolocator = Nominatim(user_agent="mental_health")
+                        loc = geolocator.geocode(place)
+                        floatlat = float(lat)
+                        floatlong = float(longit)
+                        timezone = getTimeZone(floatlat,floatlong)
+                        myGeo[place] = timezone
+                        finaltime = getLocalTime(time, timezone)
+                row["Time"] = finaltime
+                writer.writerow(row)
+        os.remove(path)
+        os.rename(newpath, path)
+        return myGeo
     else:
         print("...%s file NOT found" % user)
 
@@ -102,8 +112,9 @@ def cleanLocation(user, myGeo):
 if __name__ == "__main__":
     #create a dictionary
     myGeo = {}
+    finalDict = {}
     for user in users.SCREEN_NAME:
-        cleanLocation(user, myGeo)
-    print("myGeo dict():")
-    for key, val in myGeo.items():
+        finalDict = cleanLocation(user, myGeo)
+    #print("myGeo dict():")
+    for key, val in finalDict.items():
         print(key,"=>", val)
