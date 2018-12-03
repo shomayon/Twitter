@@ -23,7 +23,7 @@ import numpy
 import re
 import time
 from datetime import datetime
-
+import string
 """
 tweets = pd.read_csv("tweets.csv")
 tweets.head()
@@ -47,7 +47,7 @@ plt.show()
 # Here are globals used to store data - I know it's dirty, whatever
 start_date = 0
 end_date = 0
-
+"""
 activity_hourly = {
     ("%2i:00" % i).replace(" ", "0"): 0 for i in range(24)
 }
@@ -55,7 +55,7 @@ activity_hourly = {
 activity_weekly = {
     "%i" % i: 0 for i in range(7)
 }
-
+"""
 detected_langs = collections.Counter()
 detected_sources = collections.Counter()
 detected_places = collections.Counter()
@@ -229,7 +229,6 @@ def cleanLocation(user, myGeo):
     newfile_name= user+'_updatedtweets.csv'
     dir_path2 = os.path.dirname(os.path.realpath(__file__))
     newpath = Path(dir_path2+'/twitter_data/'+newfile_name)
-    
     num_tweets = 0
 
     if path.exists():
@@ -310,7 +309,22 @@ if __name__ == "__main__":
     myGeo = {}
     finalDict = {}
     for user in users.SCREEN_NAME:
+        act_hour_name = user+'_activity_hourly.csv'
+        dir_path3 = os.path.dirname(os.path.realpath(__file__))
+        path3 = Path(dir_path3+'/twitter_data/'+act_hour_name)
 
+        act_week_name = user+'_activity_weekly.csv'
+        dir_path4 = os.path.dirname(os.path.realpath(__file__))
+        path4 = Path(dir_path4+'/twitter_data/'+act_week_name)
+
+
+        activity_hourly = {
+            ("%2i:00" % i).replace(" ", "0"): 0 for i in range(24)
+        }
+
+        activity_weekly = {
+            "%i" % i: 0 for i in range(7)
+        }
 
         num_tweets = cleanLocation(user, myGeo)
 
@@ -326,13 +340,12 @@ if __name__ == "__main__":
         print("[+] statuses_count : \033[1m%s\033[0m" % user_info.statuses_count)
 
         # Will retreive all Tweets from account (or max limit)
-        #num_tweets = numpy.amin([3200, user_info.statuses_count])
         print("[+] Retrieving last %d tweets..." % num_tweets)
-
+        """
         # Download tweets
        # get_tweets(twitter_api, user, path, limit=num_tweets)
-        #print("[+] Downloaded %d tweets from %s to %s (%d days)" % (num_tweets, start_date, end_date, (end_date - start_date).days))
-        """
+        print("[+] Downloaded %d tweets from %s to %s (%d days)" % (num_tweets, start_date, end_date, (end_date - start_date).days))
+    
         # Checking if we have enough data (considering it's good to have at least 30 days of data)
         if (end_date - start_date).days < 30 and (num_tweets < user_info.statuses_count):
             print("[\033[91m!\033[0m] Looks like we do not have enough tweets from user, you should consider retrying (--limit)")
@@ -344,14 +357,12 @@ if __name__ == "__main__":
         print_charts(activity_hourly, "Daily activity distribution (per hour)")
         print_charts(activity_weekly, "Weekly activity distribution (per day)", weekday=True)
 
-        activities = []
+        hactivities = []
         for i in range(24):
-            activities.append(str(activity_hourly["%s:00" % str(i).zfill(2)]))
-        print_values(user+ '_activity_hourly.csv', activities)
-        activities = []
+            hactivities.append(str(activity_hourly["%s:00" % str(i).zfill(2)]))
+        print_values(path3, hactivities)
+        wactivities = []
         for i in range(7):
-            activities.append(str(activity_weekly["%s" % str(i)]))
-        print_values(user + '_activity_weekly.csv', activities)
-#        activity_hourly.clear() 
-#        activity_weekly.clear()
+            wactivities.append(str(activity_weekly["%s" % str(i)]))
+        print_values(path4, wactivities)
 
