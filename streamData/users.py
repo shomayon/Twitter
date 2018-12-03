@@ -1,3 +1,3 @@
 #list of users
 
-SCREEN_NAME = ["russliquid","girlbosskaty"]
+SCREEN_NAME = ["girlbosskaty", "russliquid"]

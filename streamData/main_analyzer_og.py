@@ -119,7 +119,8 @@ def process_tweet(tweet):
     # Updating our activity datasets (distribution maps)
     activity_hourly["%s:00" % str(tw_date.hour).zfill(2)] += 1
     activity_weekly[str(tw_date.weekday())] += 1
-
+    print("weekday")
+    print(tw_date.weekday())
     # Updating langs
     detected_langs[tweet.lang] += 1
 
@@ -224,7 +225,6 @@ def print_charts(dataset, title, weekday=False):
     keys = sorted(dataset.keys())
     mean = numpy.mean(list(dataset.values()))
     median = numpy.median(list(dataset.values()))
-
     for key in keys:
         if (dataset[key] >= median * 1.33):
             displayed_key = "%s (\033[92m+\033[0m)" % (int_to_weekday(key) if weekday else key)

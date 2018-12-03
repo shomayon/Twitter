@@ -26,15 +26,14 @@ import datetime
 import re
 import string
 import csv
-
-
+import secrets
 
 try:
     from urllib.parse import urlparse
 except ImportError:
     from urlparse import urlparse
 
-from secrets import consumer_key, consumer_secret, access_token, access_token_secret
+#from secrets import consumer_key, consumer_secret, access_token, access_token_secret
 
 
 parser = argparse.ArgumentParser(description=
@@ -134,6 +133,9 @@ def process_tweet(tweet):
         retweets += 1
     except:
         pass
+
+    print("Tw_date")
+    print(tw_date)
 
     # Updating our activity datasets (distribution maps)
     activity_hourly["%s:00" % str(tw_date.hour).zfill(2)] += 1
@@ -292,9 +294,13 @@ def print_charts(dataset, title, weekday=False):
 
 
 def main():
-    auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
-    auth.set_access_token(access_token, access_token_secret)
+    auth = tweepy.OAuthHandler(secrets.TWITTER_APP_KEY, secrets.TWITTER_APP_SECRET)
+    auth.set_access_token(secrets.TWITTER_KEY, secrets.TWITTER_SECRET)
     twitter_api = tweepy.API(auth)
+
+    #auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
+    #auth.set_access_token(access_token, access_token_secret)
+    #twitter_api = tweepy.API(auth)
     allusers= ['zangerdanger',
                'R2D1ck2',
                'AIIStarBacon',
