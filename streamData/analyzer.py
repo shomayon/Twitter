@@ -22,7 +22,7 @@ import secrets
 import numpy
 import re
 import time
-
+from datetime import datetime
 
 """
 tweets = pd.read_csv("tweets.csv")
@@ -137,11 +137,8 @@ def print_charts(dataset, title, weekday=False):
 def getLocalTime(time, timezone):
     utc_time = dt.datetime.strptime(time, '%Y-%m-%d %H:%M:%S').replace(tzinfo=pytz.UTC)
     local_time = utc_time.replace(tzinfo=pytz.utc).astimezone(timezone)
-    #finaltime = local_time.strftime(format='%Y-%m-%d %H:%M:%S')
-    #hour = local_time.strftime(format='%H')
-    #print(hour)
-    finaltime = local_time.strftime(format='%a %b %d %H:%M:%S %Y')
-    print(finaltime)
+    #finaltime = local_time.strftime(format='%a %b %d %H:%M:%S %Y')
+    finaltime = local_time.strftime(format='%Y-%m-%d %H:%M:%S')
     return(finaltime)
 
 def getTimeZone(latit, longit):
@@ -163,8 +160,8 @@ def process_tweet(tweet, localtime):
 
     # get correct time
     tw_date = localtime
-    weekday, month, day, hour, minute,seconds, year = time.strftime('%a,%b,%d,%H,%M,%S,%Y').split(',')
-    # Updating most recent tweet
+    #convert time to datetime in order to extract features
+    date_object = datetime.strptime(tw_date,'%Y-%m-%d %H:%M:%S')
     end_date = end_date or tw_date
     start_date = tw_date
     """
@@ -182,13 +179,11 @@ def process_tweet(tweet, localtime):
         pass
     """
     # Updating our activity datasets (distribution maps)
-    activity_hourly["%s:00" % str(hour).zfill(2)] += 1
-    newday = day.lstrip("0")
-    #print(newday)
+    activity_hourly["%s:00" % str(date_object.hour).zfill(2)] += 1
+    activity_weekly[str(date_object.weekday())] += 1
+
     
-    #activity_weekly[str(tw_date.weekday())]+=1
-    activity_weekly[str(newday)] += 1
-    """
+"""
     # Updating langs
     detected_langs[tweet.lang] += 1
 
@@ -222,7 +217,6 @@ def process_tweet(tweet, localtime):
             if not ht['screen_name'] in id_screen_names:
                 id_screen_names[ht['id_str']] = "@%s" % ht['screen_name']
     """
-
 
 def cleanLocation(user, myGeo):
     #file path made from pandastweets.py
@@ -258,7 +252,7 @@ def cleanLocation(user, myGeo):
 
                 #if the dict is empty, add the first user location
                 if len(myGeo) == 0:
-                    geolocator = Nominatim(user_agent="mental_health")
+                    geolocator = Nominatim(user_agent="twit_mental_health")
                     loc = geolocator.geocode(location)
                     #get timzone and store into hashmap
                     timezone = getTimeZone( loc.latitude, loc.longitude)
@@ -269,7 +263,7 @@ def cleanLocation(user, myGeo):
                         if place in myGeo:  #if tweetlocation is in the map
                             timezone = myGeo.get(place)
                         else:   #if tweetlocation isn't in map, add it
-                            geolocator = Nominatim(user_agent="mental_health")
+                            geolocator = Nominatim(user_agent="twit_mental_health")
                             loc = geolocator.geocode(place)
                             floatlat = float(lat)
                             floatlong = float(longit)
@@ -280,7 +274,7 @@ def cleanLocation(user, myGeo):
                         if location in myGeo:
                             timzone = myGeo.get(location)
                         else:   #add location to map
-                            geolocator = Nominatim(user_agent="mental_health")
+                            geolocator = Nominatim(user_agent="twit_mental_health")
                             loc = geolocator.geocode(location)
 
                             timezone = getTimeZone(loc.latitude, loc.longitude)
@@ -293,10 +287,15 @@ def cleanLocation(user, myGeo):
                 writer.writerow(row)
                 num_tweets = num_tweets+1
                 process_tweet(tweet, finaltime)
-
         os.remove(path)
         os.rename(newpath, path)
-        
+        print("myGeo dict():")
+        for key, val in myGeo.items():
+            print(key,"=>", val)
+
+
+        #process_tweet(tweet, finaltime)        
+ 
         return num_tweets
     else:
         print("...%s file NOT found" % user)
@@ -311,6 +310,8 @@ if __name__ == "__main__":
     myGeo = {}
     finalDict = {}
     for user in users.SCREEN_NAME:
+
+
         num_tweets = cleanLocation(user, myGeo)
 
         print("[+] Getting @%s account data..." % user)
@@ -330,29 +331,27 @@ if __name__ == "__main__":
 
         # Download tweets
        # get_tweets(twitter_api, user, path, limit=num_tweets)
-        print("[+] Downloaded %d tweets from %s to %s (%d days)" % (num_tweets, start_date, end_date, (end_date - start_date).days))
-
+        #print("[+] Downloaded %d tweets from %s to %s (%d days)" % (num_tweets, start_date, end_date, (end_date - start_date).days))
+        """
         # Checking if we have enough data (considering it's good to have at least 30 days of data)
         if (end_date - start_date).days < 30 and (num_tweets < user_info.statuses_count):
             print("[\033[91m!\033[0m] Looks like we do not have enough tweets from user, you should consider retrying (--limit)")
 
         if (end_date - start_date).days != 0:
             print("[+] Average number of tweets per day: \033[1m%.1f\033[0m" % (num_tweets / float((end_date - start_date).days)))
-
+        """
         # Print activity distrubution charts
         print_charts(activity_hourly, "Daily activity distribution (per hour)")
         print_charts(activity_weekly, "Weekly activity distribution (per day)", weekday=True)
 
-
         activities = []
         for i in range(24):
             activities.append(str(activity_hourly["%s:00" % str(i).zfill(2)]))
-        print_values(args.name + '_activity_hourly.csv', activities)
+        print_values(user+ '_activity_hourly.csv', activities)
         activities = []
         for i in range(7):
             activities.append(str(activity_weekly["%s" % str(i)]))
-        print_values(args.name + '_activity_weekly.csv', activities)
+        print_values(user + '_activity_weekly.csv', activities)
+#        activity_hourly.clear() 
+#        activity_weekly.clear()
 
-    print("myGeo dict():")
-    for key, val in finalDict.items():
-        print(key,"=>", val)
