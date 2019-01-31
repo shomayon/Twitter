@@ -32,6 +32,12 @@ def get_all_tweets(screen_name):
     dir_path = os.path.dirname(os.path.realpath(__file__))
     path = Path(dir_path+'/twitter_data/'+file_name)
     path.parent.mkdir(parents = True, exist_ok=True)
+
+    invalid_users = 'invalid_users.csv'
+    dir_path_invalid = os.path.dirname(os.path.realpath(__file__))
+    path2 = Path(dir_path+'/twitter_data/'+invalid_users)
+    path.parent.mkdir(parents = True, exist_ok=True)
+
     if path.exists():
         print("...%s file exists already" % screen_name)
         with open(path, 'r') as f:
@@ -43,10 +49,28 @@ def get_all_tweets(screen_name):
                 else:
                     break
         newtweets = []
-        
-        recent_tweets = api.user_timeline(screen_name = screen_name, count = 200, since_id = since_id)
+        recent_tweets = api.user_timeline(screen_name=screen_name, count = 200, since_id=since_id)
+       # recent_tweets = api.user_timeline(screen_name = screen_name,  since_id = since_id)
         newtweets.extend(recent_tweets)
-        #oldest = newtweets[-1].id -1
+
+        #save the id of the oldest tweet less one
+#        oldest = newtweets[-1].id - 1
+#        print("oldest")
+#        print(oldest) 
+        """
+        #keep grabbing tweets until there are no tweets left to grab
+        while len(new_tweets) > 0:
+            print("getting tweets before %s",oldest)
+            #all subsiquent requests use the max_id param to prevent duplicates
+            new_tweets = api.user_timeline(screen_name = screen_name,count=200,max_id=oldest)
+            #save most recent tweets
+            alltweets.extend(new_tweets)
+            #update the id of the oldest tweet less one
+            oldest = alltweets[-1].id - 1
+            print("...%s tweets have been downloaded so far",len(alltweets))
+        #transforming the tweets into a 2D array that will be used to populate the csv
+        """
+
         if len(recent_tweets) == 0:
             print ("...%s has no new tweets" % screen_name)
             return
@@ -59,11 +83,12 @@ def get_all_tweets(screen_name):
             #dataFrame of original tweets from csv file
             df = pd.DataFrame()
             final = pd.DataFrame()
-            col_to_use = ['Tweet_ID','Tweet','Screen_Name','Description','User_Location','Time','Geo_Enabled','Place','Lat','Long']
+            col_to_use = ['Label','Tweet_ID','Tweet','Screen_Name','Description','User_Location','Time','Geo_Enabled','Place','Lat','Long']
             df = pd.read_csv(path, index_col=False,usecols=col_to_use)[col_to_use]
             display(df.head(10))
             # copy new tweets on top of old tweets
             newdata = pd.DataFrame()
+            newdata['Label'] = None
             newdata['Tweet_ID'] = np.array([tweet.id_str for tweet in newtweets])
             newdata['Tweet'] = np.array([tweet.text for tweet in newtweets])
             newdata['Screen_Name'] = np.array([tweet.user.screen_name for tweet in newtweets])
@@ -71,10 +96,9 @@ def get_all_tweets(screen_name):
             newdata['User_Location'] = np.array([tweet.user.location for tweet in newtweets])
             newdata['Time'] = np.array([tweet.created_at for tweet in newtweets])
             newdata['Geo_Enabled'] = np.array([tweet.user.geo_enabled for tweet in newtweets])
-           # newdata['Coords'] = list(map(lambda tweet: tweet.coordinates["coordinates"] if tweet.place != None else None, newtweets))
             newdata['Place'] = list(map(lambda tweet: tweet.place.full_name if tweet.place != None else None, newtweets))
-            newdata['Lat'] = list(map(lambda tweet: tweet.coordinates["coordinates"][1] if tweet.place != None else None, newtweets))
-            newdata['Long'] = list(map(lambda tweet: tweet.coordinates["coordinates"][0] if tweet.place != None else None, newtweets))
+            newdata['Lat'] = list(map(lambda tweet: tweet.coordinates["coordinates"][1] if tweet.coordinates != None else None, newtweets))
+            newdata['Long'] = list(map(lambda tweet: tweet.coordinates["coordinates"][0] if tweet.coordinates != None else None, newtweets))
             display(newdata.head(10))
             final = newdata.append(df, sort = False)
             print("Concatenated data")
@@ -90,7 +114,17 @@ def get_all_tweets(screen_name):
 
         #save most recent tweets
         alltweets.extend(new_tweets)
-	
+        """
+        for tweet in alltweets:
+            if tweet.user.location is None:
+                print(user + "has an invalid user location")
+                bad_data = pd.DataFrame()
+                bad_data["Screen_Name"] = np.array([tweet.user.screen_name for tweet in alltweets])
+                bad_data['User_Location'] = np.array([tweet.user.location for tweet in alltweets])
+                bad_data.to_csv(path2, encoding='utf-8',index=False)
+                break
+            return
+	    """
        #save the id of the oldest tweet less one
         oldest = alltweets[-1].id - 1
 	
@@ -107,20 +141,22 @@ def get_all_tweets(screen_name):
         #transforming the tweets into a 2D array that will be used to populate the csv
         
         data = pd.DataFrame()
+        data['Label'] = None
         data['Tweet_ID'] = np.array([tweet.id_str for tweet in alltweets])
         data['Tweet'] = np.array([tweet.text for tweet in alltweets])
         data['Screen_Name'] = np.array([tweet.user.screen_name for tweet in alltweets])
         data['Description'] = np.array([tweet.user.description for tweet in alltweets])
         data['User_Location'] = np.array([tweet.user.location for tweet in alltweets])
+        print(data['User_Location'])
         data['Time'] = np.array([tweet.created_at for tweet in alltweets])
         data['Geo_Enabled'] = np.array([tweet.user.geo_enabled for tweet in alltweets])
         #data['Coords'] = list(map(lambda tweet: tweet.coordinates["coordinates"] if tweet.place != None else None, alltweets))
-        data['Place'] = list(map(lambda tweet: tweet.place.full_name if tweet.place != None else None,alltweets))
-        data['Lat'] = list(map(lambda tweet: tweet.coordinates["coordinates"][1] if tweet.place != None else None, alltweets))
-        data['Long'] = list(map(lambda tweet: tweet.coordinates["coordinates"][0] if tweet.place != None else None, alltweets))
+        print("Full name")
+        data['Place'] = list(map(lambda tweet: tweet.place.full_name if tweet.place != None else None, alltweets))
+        data['Lat'] = list(map(lambda tweet: tweet.coordinates["coordinates"][1] if tweet.coordinates != None else None, alltweets))
+        data['Long'] = list(map(lambda tweet: tweet.coordinates["coordinates"][0] if tweet.coordinates != None else None, alltweets))
         display(data.head(10))
         data.to_csv(path, encoding='utf-8', index=False)
-
 
 if __name__ == '__main__':
     #pass in the username of the account you want to download
