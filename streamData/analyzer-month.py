@@ -236,8 +236,6 @@ def getMonthTweets(user, low_activity=False):
             for row in reader:
                 time = row["Time"]
                 tweet = row["Tweet"]
-                print("tweet")
-                print(tweet)
                 #get time from csv file 
                 relative = datetime.strptime(time,'%Y-%m-%d %H:%M:%S')
                 relativedate = relative.date()
