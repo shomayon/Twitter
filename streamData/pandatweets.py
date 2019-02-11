@@ -49,7 +49,7 @@ def get_all_tweets(screen_name):
                 else:
                     break
         newtweets = []
-        recent_tweets = api.user_timeline(screen_name=screen_name, count = 200, since_id=since_id)
+        recent_tweets = api.user_timeline(screen_name=screen_name, count = 200, since_id=since_id, include_rts=False)
        # recent_tweets = api.user_timeline(screen_name = screen_name,  since_id = since_id)
         newtweets.extend(recent_tweets)
 
@@ -110,7 +110,7 @@ def get_all_tweets(screen_name):
         #initialize a list to hold all the tweepy Tweets
         alltweets = []	
         #make initial request for most recent tweets (200 is the maximum allowed count)
-        new_tweets = api.user_timeline(screen_name = screen_name,count=200)
+        new_tweets = api.user_timeline(screen_name = screen_name,count=200, include_rts=False)
 
         #save most recent tweets
         alltweets.extend(new_tweets)
