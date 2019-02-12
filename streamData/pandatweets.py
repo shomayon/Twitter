@@ -49,7 +49,7 @@ def get_all_tweets(screen_name):
                 else:
                     break
         newtweets = []
-        recent_tweets = api.user_timeline(screen_name=screen_name, count = 200, since_id=since_id, include_rts=False)
+        recent_tweets = api.user_timeline(screen_name=screen_name, count = 200, since_id=since_id, include_rts=False, tweet_mode='extended')
        # recent_tweets = api.user_timeline(screen_name = screen_name,  since_id = since_id)
         newtweets.extend(recent_tweets)
 
@@ -90,7 +90,7 @@ def get_all_tweets(screen_name):
             newdata = pd.DataFrame()
             newdata['Label'] = None
             newdata['Tweet_ID'] = np.array([tweet.id_str for tweet in newtweets])
-            newdata['Tweet'] = np.array([tweet.text for tweet in newtweets])
+            newdata['Tweet'] = np.array([tweet.full_text for tweet in newtweets])
             newdata['Screen_Name'] = np.array([tweet.user.screen_name for tweet in newtweets])
             newdata['Description'] = np.array([tweet.user.description for tweet in newtweets])
             newdata['User_Location'] = np.array([tweet.user.location for tweet in newtweets])
@@ -110,7 +110,7 @@ def get_all_tweets(screen_name):
         #initialize a list to hold all the tweepy Tweets
         alltweets = []	
         #make initial request for most recent tweets (200 is the maximum allowed count)
-        new_tweets = api.user_timeline(screen_name = screen_name,count=200, include_rts=False)
+        new_tweets = api.user_timeline(screen_name = screen_name,count=200, include_rts=False, tweet_mode ='extended')
 
         #save most recent tweets
         alltweets.extend(new_tweets)
@@ -130,20 +130,20 @@ def get_all_tweets(screen_name):
 	
        #keep grabbing tweets until there are no tweets left to grab
         while len(new_tweets) > 0:
-            print("getting tweets before %s",oldest)
+            print("getting tweets before %s" % (oldest))
             #all subsiquent requests use the max_id param to prevent duplicates
-            new_tweets = api.user_timeline(screen_name = screen_name,count=200,max_id=oldest)
+            new_tweets = api.user_timeline(screen_name = screen_name,count=200,max_id=oldest,tweet_mode = 'extended')
 		    #save most recent tweets
             alltweets.extend(new_tweets)
             #update the id of the oldest tweet less one
             oldest = alltweets[-1].id - 1
-            print("...%s tweets have been downloaded so far",len(alltweets))
+            print("...%d tweets have been downloaded so far" %len(alltweets))
         #transforming the tweets into a 2D array that will be used to populate the csv
         
         data = pd.DataFrame()
         data['Label'] = None
         data['Tweet_ID'] = np.array([tweet.id_str for tweet in alltweets])
-        data['Tweet'] = np.array([tweet.text for tweet in alltweets])
+        data['Tweet'] = np.array([tweet.full_text for tweet in alltweets])
         data['Screen_Name'] = np.array([tweet.user.screen_name for tweet in alltweets])
         data['Description'] = np.array([tweet.user.description for tweet in alltweets])
         data['User_Location'] = np.array([tweet.user.location for tweet in alltweets])
