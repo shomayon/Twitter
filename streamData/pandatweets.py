@@ -49,7 +49,7 @@ def get_all_tweets(screen_name):
                 else:
                     break
         newtweets = []
-        recent_tweets = api.user_timeline(screen_name=screen_name, count = 200, since_id=since_id, include_rts=False, tweet_mode='extended')
+        recent_tweets = api.user_timeline(screen_name=screen_name, count = 200, since_id=since_id, include_rts=False, tweet_mode='extended', lang= 'en')
        # recent_tweets = api.user_timeline(screen_name = screen_name,  since_id = since_id)
         newtweets.extend(recent_tweets)
 
@@ -110,7 +110,7 @@ def get_all_tweets(screen_name):
         #initialize a list to hold all the tweepy Tweets
         alltweets = []	
         #make initial request for most recent tweets (200 is the maximum allowed count)
-        new_tweets = api.user_timeline(screen_name = screen_name,count=200, include_rts=False, tweet_mode ='extended')
+        new_tweets = api.user_timeline(screen_name = screen_name,count=200, include_rts=False, tweet_mode ='extended',lang= 'en')
 
         #save most recent tweets
         alltweets.extend(new_tweets)
@@ -132,7 +132,7 @@ def get_all_tweets(screen_name):
         while len(new_tweets) > 0:
             print("getting tweets before %s" % (oldest))
             #all subsiquent requests use the max_id param to prevent duplicates
-            new_tweets = api.user_timeline(screen_name = screen_name,count=200,max_id=oldest,tweet_mode = 'extended')
+            new_tweets = api.user_timeline(screen_name = screen_name,count=200,max_id=oldest,tweet_mode = 'extended',lang= 'en')
 		    #save most recent tweets
             alltweets.extend(new_tweets)
             #update the id of the oldest tweet less one
