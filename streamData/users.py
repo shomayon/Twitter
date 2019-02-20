@@ -1,6 +1,5 @@
 #list of users
 
-
 SCREEN_NAME = [
                 "russliquid",
                 "Devon_Davis_23",
@@ -28,7 +27,7 @@ SCREEN_NAME = [
                 "ngwu_chioma",
                 "JulieDiCaro",
                 "OneMugManTwo",
-                "BlancDevan",
+##                "BlancDevan",
                 "Shaunski15",
                 "YvonneCovey",
                 "EmmettJana",
