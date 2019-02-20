@@ -236,33 +236,36 @@ def getMonthTweets(user, low_activity=False):
             for row in reader:
                 time = row["Time"]
                 tweet = row["Tweet"]
-                #get time from csv file 
-                relative = datetime.strptime(time,'%Y-%m-%d %H:%M:%S')
-                relativedate = relative.date()
+                if 'RT @' not in tweet:
+                    #get time from csv file 
+                    relative = datetime.strptime(time,'%Y-%m-%d %H:%M:%S')
+                    relativedate = relative.date()
 
-                #save first row
-                if line_count == 0:
-                    d1 = datetime.strptime(time,'%Y-%m-%d %H:%M:%S')
-                    enddate = relative.date()
-                    line_count +=1
-                    if low_activity is False:
-                        #two months worth of tweets
-                        startdate = enddate - timedelta(days=60)
-                    else:
-                        #6 months worth of tweets
-                        startdate = enddate - timedelta(days=120)
+                    #save first row
+                    if line_count == 0:
+                        d1 = datetime.strptime(time,'%Y-%m-%d %H:%M:%S')
+                        enddate = relative.date()
+                        line_count +=1
+                        if low_activity is False:
+                            #two months worth of tweets
+                            startdate = enddate - timedelta(days=60)
+                        else:
+                            #6 months worth of tweets
+                            startdate = enddate - timedelta(days=180)
                
-                if relativedate <= enddate and relativedate >= startdate:
-                    numtweets +=1
-                    writer.writerow(row)
-                    monthwriter.writerow({'Tweet': tweet})
+                    if relativedate <= enddate and relativedate >= startdate:
+                        numtweets +=1
+                        writer.writerow(row)
+                        monthwriter.writerow({'Tweet': tweet})
 
+                    else:
+                        d2 = datetime.strptime(time,'%Y-%m-%d %H:%M:%S')
+                        diff = (d1 - d2).days
+                        print("[+] Downloaded %d tweets from %s to %s (%d days)" % (numtweets, d2, d1, diff))
+                        break
                 else:
-                    d2 = datetime.strptime(time,'%Y-%m-%d %H:%M:%S')
-                    diff = (d1 - d2).days
-                    print("[+] Downloaded %d tweets from %s to %s (%d days)" % (numtweets, d2, d1, diff))
+                    #don't include RTs
                     break
-
     else:
         print("...%s file NOT found" % user)
 
@@ -306,7 +309,7 @@ def cleanLocation(user, myGeo):
 
                 #if the dict is empty, add the first user location
                 if len(myGeo) == 0:
-                    geolocator = Nominatim(user_agent="twit_mental_health")
+                    geolocator = Nominatim(user_agent="twit_health")
                     loc = geolocator.geocode(location)
                     #get timzone and store into hashmap
                     timezone = getTimeZone( loc.latitude, loc.longitude)
@@ -317,7 +320,7 @@ def cleanLocation(user, myGeo):
                         if place in myGeo:  #if tweetlocation is in the map
                             timezone = myGeo.get(place)
                         else:   #if tweetlocation isn't in map, add it
-                            geolocator = Nominatim(user_agent="twit_mental_health")
+                            geolocator = Nominatim(user_agent="twit_health")
                             loc = geolocator.geocode(place)
                             floatlat = float(lat)
                             floatlong = float(longit)
@@ -329,7 +332,7 @@ def cleanLocation(user, myGeo):
                             timezone = myGeo.get(location)
                         else:   #add location to map
                             print("lat and longit is none")                            
-                            geolocator = Nominatim(user_agent="twit_mental_health")
+                            geolocator = Nominatim(user_agent="twit_health")
                             loc = geolocator.geocode(location)
                             #get timzone and store into hashmap
                             timezone = getTimeZone( loc.latitude, loc.longitude)
